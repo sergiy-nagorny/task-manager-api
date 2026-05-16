@@ -17,9 +17,9 @@ Incremental build plan — start simple, evolve one concern at a time.
 
 ---
 
-## Phase 2 — Unit Tests ← current
+## Phase 2 — Unit Tests ✅
 
-Test repository and endpoint logic in isolation.
+**Done.**
 
 - Add `TaskManager.Api.Tests` project (xUnit)
 - Unit test `TaskRepository` (Create, GetAll, GetById, Update, Delete)
@@ -27,7 +27,9 @@ Test repository and endpoint logic in isolation.
 
 ---
 
-## Phase 3 — Integration Tests
+## Phase 3 — Integration Tests ✅
+
+**Done.**
 
 Test the full HTTP stack end-to-end.
 
@@ -37,7 +39,7 @@ Test the full HTTP stack end-to-end.
 
 ---
 
-## Phase 4 — Code Quality
+## Phase 4 — Code Quality ← current
 
 Enforce consistent style and safety across the solution.
 

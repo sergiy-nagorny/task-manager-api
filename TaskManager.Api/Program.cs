@@ -25,3 +25,5 @@ app.MapDefaultEndpoints();
 app.MapTaskEndpoints();
 
 app.Run();
+
+public partial class Program { }

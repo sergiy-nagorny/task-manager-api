@@ -19,12 +19,26 @@ The Aspire dashboard will open automatically in your browser. The API is listed 
 
 > No Docker or Podman required — SQLite is used as the local database (no container needed).
 
+### Run without Aspire (direct API debug)
+
+To run or debug just the API project without the Aspire dashboard:
+
+```bash
+dotnet run --project TaskManager.Api
+```
+
+URLs when running directly:
+- HTTP: `http://localhost:5181`
+- HTTPS: `https://localhost:7296`
+
+In **VS Code**, press `F5` and select the `TaskManager.Api` launch profile (requires C# Dev Kit extension).
+
 ### API docs
 
-Once running, open the Scalar UI from the API's base URL:
+Once running, open the Scalar UI:
 
 ```
-<api-base-url>/scalar/v1
+https://localhost:7296/scalar/v1
 ```
 
 ## Endpoints

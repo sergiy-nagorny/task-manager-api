@@ -17,7 +17,7 @@ dotnet run --project TaskManager.AppHost
 
 The Aspire dashboard will open automatically in your browser. The API is listed there as a resource.
 
-> No Docker or Podman required — SQLite is used as the local database (no container needed).
+> No Docker or Podman required. The current data store is in-memory (Phase 1). SQLite is added in Phase 8 — still no Docker needed.
 
 ### Run without Aspire (direct API debug)
 
@@ -51,6 +51,12 @@ Once running, open the Scalar UI:
 
 ```
 https://localhost:7296/scalar/v1
+```
+
+### Run tests
+
+```bash
+dotnet test TaskManager.Api.Tests
 ```
 
 ## Endpoints

@@ -14,7 +14,7 @@ Chosen for simplicity and to learn the modern .NET approach. Controllers add ind
 
 Aspire handles running the API locally, wiring up the dashboard, health checks, and telemetry out of the box. It also provides a clean path to adding databases and other resources in later phases without changing how the app is run.
 
-**Note:** Docker/Podman is NOT required unless containerized resources (Postgres, Redis, etc.) are added. SQLite in Phase 2 won't require Docker.
+**Note:** Docker/Podman is NOT required unless containerized resources (Postgres, Redis, etc.) are added. SQLite in Phase 8 won't require Docker.
 
 ---
 
@@ -34,9 +34,9 @@ All error responses return structured JSON instead of plain strings. Enabled via
 
 ---
 
-## SQLite for Phase 2 (over SQL Server / Postgres)
+## SQLite for Phase 8 (over SQL Server / Postgres)
 
-Keeps the local dev experience simple — no Docker, no server process. Easy to swap for Azure SQL in Phase 5 by changing the EF Core connection string and provider.
+Keeps the local dev experience simple — no Docker, no server process. Easy to swap for Azure SQL in Phase 12 by changing the EF Core connection string and provider.
 
 ---
 

@@ -10,6 +10,7 @@ A Task Manager REST API built with .NET 10, using Minimal APIs and .NET Aspire f
 TaskManager.sln
 ├── TaskManager.AppHost          — Aspire orchestrator (entry point for running locally)
 ├── TaskManager.Api              — The REST API
+├── TaskManager.Api.Tests        — Unit tests (xUnit)
 └── TaskManager.ServiceDefaults  — Shared Aspire config (telemetry, health checks)
 ```
 
@@ -22,9 +23,9 @@ TaskManager.sln
 | API docs | Built-in OpenAPI + Scalar UI |
 | Error responses | Problem Details (RFC 7807) |
 | Data store (Phase 1) | In-memory Dictionary |
-| Data store (Phase 2) | EF Core + SQLite |
-| Auth (Phase 4) | Entra ID |
-| Hosting (Phase 5) | Azure Container Apps |
+| Data store (Phase 8) | EF Core + SQLite |
+| Auth (Phase 11) | Entra ID |
+| Hosting (Phase 12) | Azure Container Apps |
 
 ## API Endpoints
 
@@ -40,7 +41,7 @@ TaskManager.sln
 
 - **Minimal APIs** — no controllers; routes map directly to static handler methods in `TaskEndpoints.cs`
 - **TypedResults** — handler return types are explicit (e.g. `Results<Ok<TaskItem>, NotFound>`), giving accurate OpenAPI response schemas without annotations
-- **Singleton TaskRepository** — survives between requests; resets on process restart (replaced by EF Core in Phase 2)
+- **Singleton TaskRepository** — survives between requests; resets on process restart (replaced by EF Core in Phase 8)
 - **Problem Details everywhere** — `AddProblemDetails` + `UseExceptionHandler` + `UseStatusCodePages` ensures all errors return structured JSON
 - **Aspire for local dev** — AppHost starts the API as a child process and provides the dashboard; no Docker needed for plain .NET resources
 

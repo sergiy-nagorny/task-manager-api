@@ -6,7 +6,8 @@ obj/
 *.user
 *.suo
 .vs/
-.vscode/settings.json
+.vscode/
+.claude/
 
 # Aspire
 .aspire/

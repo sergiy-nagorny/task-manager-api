@@ -72,6 +72,7 @@ public class TaskEndpointsTests
 
         var ok = Assert.IsType<Ok<TaskItem>>(result.Result);
         Assert.Equal("Updated", ok.Value!.Title);
+        Assert.Null(ok.Value.Description);
         Assert.True(ok.Value.IsComplete);
     }
 

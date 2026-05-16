@@ -51,6 +51,13 @@ gh repo create task-manager-api --public --source=. --remote=origin --push
 
 ## Claude Code Session Management
 ```
-claude --continue    # resume most recent session
-claude --resume      # pick from list of past sessions
+claude --continue                        # resume most recent session
+claude --resume                          # pick from list of past sessions
+claude --dangerously-skip-permissions    # skip all approval prompts for the session
+```
+
+## Claude Code Settings
+```
+/config       # open settings UI
+/permissions  # manage permission mode
 ```

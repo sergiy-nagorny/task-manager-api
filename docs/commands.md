@@ -57,4 +57,17 @@ claude --dangerously-skip-permissions    # skip all approval prompts for the ses
 ```
 /config       # open settings UI
 /permissions  # manage permission mode
+/hooks        # view, edit, or disable configured hooks
+```
+
+## Claude Code Built-in Skills (slash commands)
+```
+/init              # generate CLAUDE.md codebase documentation for future sessions
+/review            # code review of current branch changes
+/security-review   # security scan of pending changes (run before auth phase)
+/simplify          # review changed code for quality and refactor opportunities
+/update-config     # configure hooks and settings.json (automated behaviors)
+/keybindings-help  # customize keyboard shortcuts
+/schedule          # schedule recurring or one-time remote agents
+/loop              # run a prompt on a recurring interval
 ```

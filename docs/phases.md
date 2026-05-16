@@ -39,7 +39,19 @@ Test the full HTTP stack end-to-end.
 
 ---
 
-## Phase 4 — Code Quality ← current
+## Phase 4 — Clean Architecture Split ✅
+
+**Done.**
+
+- Extracted `TaskManager.Domain` (entity: `TaskItem`)
+- Extracted `TaskManager.Application` (interface: `ITaskRepository`, DTOs: `CreateTaskRequest`, `UpdateTaskRequest`)
+- Extracted `TaskManager.Infrastructure` (impl: `InMemoryTaskRepository`)
+- `TaskManager.Api` slimmed to endpoints + DI wiring only
+- All 27 tests pass on the new structure
+
+---
+
+## Phase 5 — Code Quality ← current
 
 Enforce consistent style and safety across the solution.
 

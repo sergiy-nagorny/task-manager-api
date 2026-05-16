@@ -1,10 +1,11 @@
-using TaskManager.Api;
+using TaskManager.Application;
+using TaskManager.Infrastructure;
 
 namespace TaskManager.Api.Tests;
 
 public class TaskRepositoryTests
 {
-    private readonly TaskRepository _repo = new();
+    private readonly ITaskRepository _repo = new InMemoryTaskRepository();
 
     [Fact]
     public void Create_AddsTaskAndReturnsIt()

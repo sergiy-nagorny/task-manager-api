@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Http.HttpResults;
-using TaskManager.Api;
+using TaskManager.Application;
+using TaskManager.Domain;
+using TaskManager.Infrastructure;
 
 namespace TaskManager.Api.Tests;
 
 public class TaskEndpointsTests
 {
-    private readonly TaskRepository _repo = new();
+    private readonly ITaskRepository _repo = new InMemoryTaskRepository();
 
     // GET /tasks
 

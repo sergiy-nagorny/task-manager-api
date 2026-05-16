@@ -1,6 +1,9 @@
-namespace TaskManager.Api;
+using TaskManager.Application;
+using TaskManager.Domain;
 
-public class TaskRepository
+namespace TaskManager.Infrastructure;
+
+public class InMemoryTaskRepository : ITaskRepository
 {
     private readonly Dictionary<Guid, TaskItem> _tasks = [];
 

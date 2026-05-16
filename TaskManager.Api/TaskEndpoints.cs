@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using TaskManager.Application;
+using TaskManager.Domain;
 
 namespace TaskManager.Api;
 
@@ -17,26 +19,26 @@ public static class TaskEndpoints
         return app;
     }
 
-    internal static Ok<IEnumerable<TaskItem>> GetAll(TaskRepository repo) =>
+    internal static Ok<IEnumerable<TaskItem>> GetAll(ITaskRepository repo) =>
         TypedResults.Ok(repo.GetAll());
 
-    internal static Results<Ok<TaskItem>, NotFound> GetById(Guid id, TaskRepository repo) =>
+    internal static Results<Ok<TaskItem>, NotFound> GetById(Guid id, ITaskRepository repo) =>
         repo.GetById(id) is TaskItem task
             ? TypedResults.Ok(task)
             : TypedResults.NotFound();
 
-    internal static Created<TaskItem> Create(CreateTaskRequest request, TaskRepository repo)
+    internal static Created<TaskItem> Create(CreateTaskRequest request, ITaskRepository repo)
     {
         var task = repo.Create(request);
         return TypedResults.Created($"/tasks/{task.Id}", task);
     }
 
-    internal static Results<Ok<TaskItem>, NotFound> Update(Guid id, UpdateTaskRequest request, TaskRepository repo) =>
+    internal static Results<Ok<TaskItem>, NotFound> Update(Guid id, UpdateTaskRequest request, ITaskRepository repo) =>
         repo.Update(id, request) is TaskItem task
             ? TypedResults.Ok(task)
             : TypedResults.NotFound();
 
-    internal static Results<NoContent, NotFound> Delete(Guid id, TaskRepository repo) =>
+    internal static Results<NoContent, NotFound> Delete(Guid id, ITaskRepository repo) =>
         repo.Delete(id)
             ? TypedResults.NoContent()
             : TypedResults.NotFound();

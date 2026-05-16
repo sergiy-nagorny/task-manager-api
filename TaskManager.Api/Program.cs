@@ -1,12 +1,13 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Scalar.AspNetCore;
 using TaskManager.Api;
+using TaskManager.Application;
+using TaskManager.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
-builder.Services.AddSingleton<TaskRepository>();
+builder.Services.AddSingleton<ITaskRepository, InMemoryTaskRepository>();
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();

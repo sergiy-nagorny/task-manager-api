@@ -1,4 +1,4 @@
-namespace TaskManager.Api;
+namespace TaskManager.Domain;
 
 public class TaskItem
 {
@@ -8,6 +8,3 @@ public class TaskItem
     public bool IsComplete { get; set; }
     public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 }
-
-public record CreateTaskRequest(string Title, string? Description);
-public record UpdateTaskRequest(string Title, string? Description, bool IsComplete);

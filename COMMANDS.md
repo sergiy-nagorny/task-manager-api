@@ -27,6 +27,23 @@ dotnet build TaskManager.sln
 dotnet run --project TaskManager.AppHost
 ```
 
+## Git & GitHub
+```
+git config --global user.email "sergiy.nagorny@gmail.com"
+git config --global user.name "Sergiy Nagorny"
+git init
+git add <files>
+git commit -m "message"
+gh repo create task-manager-api --public --source=. --remote=origin --push
+```
+
+## VS Code Extensions
+```
+# Search in Ctrl+Shift+X:
+# vscode-solution-explorer  (by Fernando Escolan) — reliable .sln browser
+# C# Dev Kit                (ms-dotnettools.csdevkit)  — IntelliSense, debugging
+```
+
 ## Claude Code Session Management
 ```
 claude --continue    # resume most recent session

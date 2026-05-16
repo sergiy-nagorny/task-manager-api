@@ -33,6 +33,18 @@ URLs when running directly:
 
 In **VS Code**, press `F5` and select the `TaskManager.Api` launch profile (requires C# Dev Kit extension).
 
+#### Debugging with breakpoints in VS Code
+
+1. Click in the gutter (left of the line number) to set a breakpoint — a red dot appears
+2. Press `F5` to start debugging (or **Run → Start Debugging**)
+3. Make an API request (via Scalar UI, `.http` file, or curl)
+4. VS Code pauses at the breakpoint — use the debug toolbar to:
+   - `F10` — step over (next line)
+   - `F11` — step into (go inside a method call)
+   - `F5` — continue to next breakpoint
+   - Hover over variables to inspect their values
+5. Press `Shift+F5` to stop the debugger
+
 ### API docs
 
 Once running, open the Scalar UI:

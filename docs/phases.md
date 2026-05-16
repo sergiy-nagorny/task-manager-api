@@ -17,7 +17,66 @@ Incremental build plan — start simple, evolve one concern at a time.
 
 ---
 
-## Phase 2 — EF Core + SQLite
+## Phase 2 — Unit Tests ← current
+
+Test repository and endpoint logic in isolation.
+
+- Add `TaskManager.Api.Tests` project (xUnit)
+- Unit test `TaskRepository` (Create, GetAll, GetById, Update, Delete)
+- Unit test endpoint handlers directly (happy path + not found cases)
+
+---
+
+## Phase 3 — Integration Tests
+
+Test the full HTTP stack end-to-end.
+
+- Use `WebApplicationFactory<Program>` to spin up the real API in-process
+- Test each endpoint over HTTP (status codes, response bodies)
+- No mocking — real in-memory store, real middleware pipeline
+
+---
+
+## Phase 4 — Code Quality
+
+Enforce consistent style and safety across the solution.
+
+- Add `.editorconfig` with formatting rules (indentation, line endings, etc.)
+- Verify nullable reference types are enforced (`<Nullable>enable</Nullable>`)
+- Fix any resulting warnings
+
+---
+
+## Phase 5 — Input Validation
+
+Reject bad input at the API boundary.
+
+- Title required, non-empty, max length
+- Return `400 Bad Request` with Problem Details on validation failure
+- Cover validation in existing integration tests
+
+---
+
+## Phase 6 — Structured Logging
+
+Make the API observable via explicit logging.
+
+- Inject `ILogger` into endpoint handlers
+- Log key operations (task created, not found, deleted, etc.)
+- Verify logs appear in Aspire dashboard
+
+---
+
+## Phase 7 — .http File Polish
+
+Improve the developer experience for manual testing.
+
+- Add sample request bodies for all endpoints
+- Cover happy path and error cases (missing ID, bad input)
+
+---
+
+## Phase 8 — EF Core + SQLite
 
 Replace the in-memory `TaskRepository` with a real database.
 
@@ -29,23 +88,36 @@ Replace the in-memory `TaskRepository` with a real database.
 
 ---
 
-## Phase 3 — Validation + Filtering / Pagination
+## Phase 9 — Filtering + Pagination
 
-- Input validation (e.g. title required, max length)
-- Filter tasks by `IsComplete`
-- Pagination on `GET /tasks`
+Make `GET /tasks` production-grade.
+
+- Filter by `IsComplete`
+- Pagination (page + pageSize query params)
+- Update integration tests
 
 ---
 
-## Phase 4 — Auth (Entra ID)
+## Phase 10 — API Versioning
 
-- Protect endpoints with Entra ID (Azure AD) bearer tokens
+Introduce versioning for future-proofing.
+
+- Route-based versioning (`/api/v1/tasks`)
+- Document versioning strategy
+
+---
+
+## Phase 11 — Auth (Entra ID)
+
+Protect endpoints with Entra ID bearer tokens.
+
 - Register app in Azure portal
 - Add auth middleware
+- Protect all task endpoints
 
 ---
 
-## Phase 5 — Containerize + Deploy to Azure Container Apps
+## Phase 12 — Containerize + Deploy to Azure Container Apps
 
 - Add Dockerfile
 - Switch from SQLite to Azure SQL

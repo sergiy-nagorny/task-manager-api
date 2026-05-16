@@ -24,8 +24,13 @@ dotnet add TaskManager.Api package Scalar.AspNetCore
 ## Build & Run
 ```
 dotnet build TaskManager.sln
-dotnet run --project TaskManager.AppHost
+dotnet run --project TaskManager.AppHost   # runs Aspire dashboard + API (no Docker needed for plain .NET resources)
 ```
+
+## Aspire Notes
+- Docker/Podman NOT required unless you add containerized resources (Postgres, Redis, etc.)
+- SQLite in Phase 2 = still no Docker needed
+- Aspire dashboard opens automatically in browser when AppHost starts
 
 ## Git & GitHub
 ```

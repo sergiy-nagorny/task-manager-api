@@ -3,6 +3,7 @@
 ## Install & Setup
 ```
 winget install Microsoft.DotNet.SDK.10 --accept-source-agreements --accept-package-agreements --silent
+winget install GitHub.cli --accept-source-agreements --accept-package-agreements
 dotnet dev-certs https --trust
 ```
 
@@ -27,11 +28,6 @@ dotnet build TaskManager.sln
 dotnet run --project TaskManager.AppHost   # runs Aspire dashboard + API (no Docker needed for plain .NET resources)
 ```
 
-## Aspire Notes
-- Docker/Podman NOT required unless you add containerized resources (Postgres, Redis, etc.)
-- SQLite in Phase 2 = still no Docker needed
-- Aspire dashboard opens automatically in browser when AppHost starts
-
 ## Git & GitHub
 ```
 git config --global user.email "sergiy.nagorny@gmail.com"
@@ -40,6 +36,7 @@ git init
 git add <files>
 git commit -m "message"
 gh repo create task-manager-api --public --source=. --remote=origin --push
+gh auth login                            # authenticate GitHub CLI (run in PowerShell, not via !)
 ```
 
 ## VS Code Extensions

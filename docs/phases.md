@@ -51,7 +51,18 @@ Test the full HTTP stack end-to-end.
 
 ---
 
-## Phase 5 — Code Quality ← current
+## Phase 5 — Diagnostic Endpoints ✅
+
+**Done.**
+
+- `GET /ping` — liveness check, always 200 if the process is running
+- `GET /ready` — readiness check, exercises each key dependency and returns a `checks` array with per-resource status (200 healthy / 503 degraded)
+- Both endpoints available in all environments (not dev-only) for container health probes
+- 38 tests passing
+
+---
+
+## Phase 6 — Code Quality ← current
 
 Enforce consistent style and safety across the solution.
 
@@ -61,7 +72,7 @@ Enforce consistent style and safety across the solution.
 
 ---
 
-## Phase 5 — Input Validation
+## Phase 7 — Input Validation
 
 Reject bad input at the API boundary.
 
@@ -71,7 +82,7 @@ Reject bad input at the API boundary.
 
 ---
 
-## Phase 6 — Structured Logging
+## Phase 8 — Structured Logging
 
 Make the API observable via explicit logging.
 
@@ -81,7 +92,7 @@ Make the API observable via explicit logging.
 
 ---
 
-## Phase 7 — .http File Polish
+## Phase 9 — .http File Polish
 
 Improve the developer experience for manual testing.
 
@@ -90,7 +101,7 @@ Improve the developer experience for manual testing.
 
 ---
 
-## Phase 8 — EF Core + SQLite
+## Phase 10 — EF Core + SQLite
 
 Replace the in-memory `TaskRepository` with a real database.
 
@@ -100,9 +111,11 @@ Replace the in-memory `TaskRepository` with a real database.
 - Add and apply initial migration
 - Data persists across restarts
 
+> **Carry-forward from Phase 5:** Update `DiagnosticsEndpoints.Ready()` to use `dbContext.Database.CanConnectAsync()` instead of `repo.GetAll()` — once a real DB is in place, `GetAll()` would enumerate all rows on every probe.
+
 ---
 
-## Phase 9 — Filtering + Pagination
+## Phase 11 — Filtering + Pagination
 
 Make `GET /tasks` production-grade.
 
@@ -112,7 +125,7 @@ Make `GET /tasks` production-grade.
 
 ---
 
-## Phase 10 — API Versioning
+## Phase 12 — API Versioning
 
 Introduce versioning for future-proofing.
 
@@ -121,7 +134,7 @@ Introduce versioning for future-proofing.
 
 ---
 
-## Phase 11 — Auth (Entra ID)
+## Phase 13 — Auth (Entra ID)
 
 Protect endpoints with Entra ID bearer tokens.
 
@@ -131,7 +144,7 @@ Protect endpoints with Entra ID bearer tokens.
 
 ---
 
-## Phase 12 — Containerize + Deploy to Azure Container Apps
+## Phase 14 — Containerize + Deploy to Azure Container Apps
 
 - Add Dockerfile
 - Switch from SQLite to Azure SQL

@@ -1,0 +1,15 @@
+@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1" Color="Color.Primary">
+        <MudText Typo="Typo.h6">Task Manager</MudText>
+    </MudAppBar>
+    <MudMainContent Class="pt-16">
+        @Body
+    </MudMainContent>
+</MudLayout>

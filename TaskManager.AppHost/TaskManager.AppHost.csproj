@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskManager.Api\TaskManager.Api.csproj" />
+    <ProjectReference Include="..\TaskManager.Web.Blazor\TaskManager.Web.Blazor.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

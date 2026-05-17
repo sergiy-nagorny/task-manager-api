@@ -77,7 +77,21 @@ Test the full HTTP stack end-to-end.
 
 ---
 
-## Phase 7 — Code Quality ← current
+## Phase 7 — Blazor Component Tests (bUnit) ✅
+
+**Done.**
+
+- Added `TaskManager.Web.Blazor.Tests` project (bUnit 1.37.7 + RichardSzalay.MockHttp)
+- `BlazorTestContext` base class: JSInterop.Loose, MockHttp, MudServices + all MudBlazor providers
+- `HomeTests` (8 tests): load, create, toggle-complete, delete, error snackbars, disabled-state
+- `EditTaskDialogTests` (6 tests): pre-fill, save PUT → close, API error/down snackbars, disabled-when-empty, cancel
+- 14 Blazor tests + 38 API tests = 52 passing
+
+> **Future:** E2E browser tests (Playwright) — visual regression, real browser interactions across the full stack.
+
+---
+
+## Phase 8 — Code Quality ← current
 
 Enforce consistent style and safety across the solution.
 
@@ -87,7 +101,7 @@ Enforce consistent style and safety across the solution.
 
 ---
 
-## Phase 8 — Input Validation
+## Phase 9 — Input Validation
 
 Reject bad input at the API boundary.
 
@@ -97,7 +111,7 @@ Reject bad input at the API boundary.
 
 ---
 
-## Phase 8 — Structured Logging
+## Phase 10 — Structured Logging
 
 Make the API observable via explicit logging.
 
@@ -107,7 +121,7 @@ Make the API observable via explicit logging.
 
 ---
 
-## Phase 9 — .http File Polish
+## Phase 11 — .http File Polish
 
 Improve the developer experience for manual testing.
 
@@ -116,7 +130,7 @@ Improve the developer experience for manual testing.
 
 ---
 
-## Phase 10 — EF Core + SQLite
+## Phase 12 — EF Core + SQLite
 
 Replace the in-memory `TaskRepository` with a real database.
 
@@ -130,7 +144,7 @@ Replace the in-memory `TaskRepository` with a real database.
 
 ---
 
-## Phase 11 — Filtering + Pagination
+## Phase 13 — Filtering + Pagination
 
 Make `GET /tasks` production-grade.
 
@@ -140,7 +154,7 @@ Make `GET /tasks` production-grade.
 
 ---
 
-## Phase 12 — API Versioning
+## Phase 14 — API Versioning
 
 Introduce versioning for future-proofing.
 
@@ -149,7 +163,7 @@ Introduce versioning for future-proofing.
 
 ---
 
-## Phase 13 — Auth (Entra ID)
+## Phase 15 — Auth (Entra ID)
 
 Protect endpoints with Entra ID bearer tokens.
 
@@ -159,9 +173,11 @@ Protect endpoints with Entra ID bearer tokens.
 
 ---
 
-## Phase 14 — Containerize + Deploy to Azure Container Apps
+## Phase 16 — Containerize + Deploy to Azure Container Apps
 
 - Add Dockerfile
 - Switch from SQLite to Azure SQL
 - Deploy via Azure Container Apps
 - Wire up Aspire for cloud resources
+
+> **Carry-forward from Phase 6:** Replace `AllowAnyOrigin` CORS policy with an explicit origin allowlist before deploying.

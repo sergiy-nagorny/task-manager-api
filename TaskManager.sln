@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Web.Blazor", "TaskManager.Web.Blazor\TaskManager.Web.Blazor.csproj", "{26287E5B-710C-4A4E-9D6D-B17D499E0B4B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Web.Blazor.Tests", "TaskManager.Web.Blazor.Tests\TaskManager.Web.Blazor.Tests.csproj", "{445D26B5-8489-419D-8293-BA6D8A53E6FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,18 @@ Global
 		{26287E5B-710C-4A4E-9D6D-B17D499E0B4B}.Release|x64.Build.0 = Release|Any CPU
 		{26287E5B-710C-4A4E-9D6D-B17D499E0B4B}.Release|x86.ActiveCfg = Release|Any CPU
 		{26287E5B-710C-4A4E-9D6D-B17D499E0B4B}.Release|x86.Build.0 = Release|Any CPU
+		{445D26B5-8489-419D-8293-BA6D8A53E6FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{445D26B5-8489-419D-8293-BA6D8A53E6FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{445D26B5-8489-419D-8293-BA6D8A53E6FE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{445D26B5-8489-419D-8293-BA6D8A53E6FE}.Debug|x64.Build.0 = Debug|Any CPU
+		{445D26B5-8489-419D-8293-BA6D8A53E6FE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{445D26B5-8489-419D-8293-BA6D8A53E6FE}.Debug|x86.Build.0 = Debug|Any CPU
+		{445D26B5-8489-419D-8293-BA6D8A53E6FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{445D26B5-8489-419D-8293-BA6D8A53E6FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{445D26B5-8489-419D-8293-BA6D8A53E6FE}.Release|x64.ActiveCfg = Release|Any CPU
+		{445D26B5-8489-419D-8293-BA6D8A53E6FE}.Release|x64.Build.0 = Release|Any CPU
+		{445D26B5-8489-419D-8293-BA6D8A53E6FE}.Release|x86.ActiveCfg = Release|Any CPU
+		{445D26B5-8489-419D-8293-BA6D8A53E6FE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

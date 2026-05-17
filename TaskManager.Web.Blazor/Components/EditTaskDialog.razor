@@ -8,9 +8,9 @@
         <MudTextField @bind-Value="editDescription" Label="Description" Variant="Variant.Outlined" />
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton OnClick="Cancel" Disabled="busy">Cancel</MudButton>
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Save"
-            Disabled="string.IsNullOrWhiteSpace(editTitle)">
+            Disabled="string.IsNullOrWhiteSpace(editTitle) || busy">
             Save
         </MudButton>
     </DialogActions>
@@ -18,10 +18,11 @@
 
 @code {
     [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
-    [Parameter] public TaskItem Task { get; set; } = default!;
+    [Parameter, EditorRequired] public TaskItem Task { get; set; } = default!;
 
     private string editTitle = "";
     private string? editDescription;
+    private bool busy = false;
 
     protected override void OnInitialized()
     {
@@ -33,6 +34,7 @@
 
     private async Task Save()
     {
+        busy = true;
         try
         {
             var response = await Http.PutAsJsonAsync($"tasks/{Task.Id}", new
@@ -54,6 +56,10 @@
         catch (HttpRequestException)
         {
             Snackbar.Add("Could not reach the API", Severity.Error);
+        }
+        finally
+        {
+            busy = false;
         }
     }
 }

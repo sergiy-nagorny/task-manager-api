@@ -21,7 +21,7 @@
         </MudCardContent>
         <MudCardActions Class="px-4 pb-4">
             <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
-                OnClick="CreateTask" Disabled="string.IsNullOrWhiteSpace(newTitle)">
+                OnClick="CreateTask" Disabled="string.IsNullOrWhiteSpace(newTitle) || busy">
                 Add Task
             </MudButton>
         </MudCardActions>
@@ -76,15 +76,15 @@
                             <MudTooltip Text="@(context.IsComplete ? "Mark open" : "Mark done")">
                                 <MudIconButton Icon="@(context.IsComplete ? Icons.Material.Filled.Undo : Icons.Material.Filled.CheckCircle)"
                                     Color="@(context.IsComplete ? Color.Default : Color.Success)"
-                                    Size="Size.Small" OnClick="() => ToggleComplete(context)" />
+                                    Size="Size.Small" Disabled="busy" OnClick="() => ToggleComplete(context)" />
                             </MudTooltip>
                             <MudTooltip Text="Edit">
                                 <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary"
-                                    Size="Size.Small" OnClick="() => OpenEditDialog(context)" />
+                                    Size="Size.Small" Disabled="busy" OnClick="() => OpenEditDialog(context)" />
                             </MudTooltip>
                             <MudTooltip Text="Delete">
                                 <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error"
-                                    Size="Size.Small" OnClick="() => DeleteTask(context)" />
+                                    Size="Size.Small" Disabled="busy" OnClick="() => DeleteTask(context)" />
                             </MudTooltip>
                         </MudTd>
                     </RowTemplate>
@@ -100,6 +100,7 @@
     private string newTitle = "";
     private string? newDescription;
     private bool loading = true;
+    private bool busy = false;
 
     protected override async Task OnInitializedAsync() => await LoadTasks();
 
@@ -114,6 +115,10 @@
         {
             Snackbar.Add("Could not reach the API — is it running?", Severity.Error);
         }
+        catch (Exception)
+        {
+            Snackbar.Add("Unexpected error loading tasks", Severity.Error);
+        }
         finally
         {
             loading = false;
@@ -123,6 +128,7 @@
     private async Task CreateTask()
     {
         if (string.IsNullOrWhiteSpace(newTitle)) return;
+        busy = true;
         try
         {
             var response = await Http.PostAsJsonAsync("tasks", new { title = newTitle, description = newDescription });
@@ -143,10 +149,15 @@
         {
             Snackbar.Add("Could not reach the API", Severity.Error);
         }
+        finally
+        {
+            busy = false;
+        }
     }
 
     private async Task ToggleComplete(TaskItem task)
     {
+        busy = true;
         try
         {
             var response = await Http.PutAsJsonAsync($"tasks/{task.Id}", new
@@ -164,11 +175,16 @@
             else
             {
                 Snackbar.Add("Failed to update task", Severity.Error);
+                await LoadTasks();
             }
         }
         catch (HttpRequestException)
         {
             Snackbar.Add("Could not reach the API", Severity.Error);
+        }
+        finally
+        {
+            busy = false;
         }
     }
 
@@ -188,6 +204,7 @@
 
     private async Task DeleteTask(TaskItem task)
     {
+        busy = true;
         try
         {
             var response = await Http.DeleteAsync($"tasks/{task.Id}");
@@ -199,11 +216,16 @@
             else
             {
                 Snackbar.Add("Failed to delete task", Severity.Error);
+                await LoadTasks();
             }
         }
         catch (HttpRequestException)
         {
             Snackbar.Add("Could not reach the API", Severity.Error);
+        }
+        finally
+        {
+            busy = false;
         }
     }
 

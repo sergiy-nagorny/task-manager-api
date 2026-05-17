@@ -12,7 +12,7 @@ builder.Services.AddProblemDetails();
 
 if (builder.Environment.IsDevelopment())
     builder.Services.AddCors(options =>
-        // TODO Phase 14: replace AllowAnyOrigin with explicit origin allowlist before deploying
+        // TODO Phase 16: replace AllowAnyOrigin with explicit origin allowlist before deploying
         options.AddPolicy("Dev", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
 var app = builder.Build();

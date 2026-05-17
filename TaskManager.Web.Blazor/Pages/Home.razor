@@ -127,7 +127,7 @@
 
     private async Task CreateTask()
     {
-        if (string.IsNullOrWhiteSpace(newTitle)) return;
+        if (string.IsNullOrWhiteSpace(newTitle) || busy) return;
         busy = true;
         try
         {

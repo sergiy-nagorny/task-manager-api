@@ -178,7 +178,7 @@
         var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true, CloseButton = true };
         var dialog = await DialogService.ShowAsync<EditTaskDialog>("Edit Task", parameters, options);
         var result = await dialog.Result;
-        if (!result!.Canceled && result.Data is TaskItem updated)
+        if (result is not null && !result.Canceled && result.Data is TaskItem updated)
         {
             var idx = tasks.IndexOf(task);
             if (idx >= 0) tasks[idx] = updated;

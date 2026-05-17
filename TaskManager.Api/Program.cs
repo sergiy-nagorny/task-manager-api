@@ -24,6 +24,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.MapDefaultEndpoints();
 app.MapTaskEndpoints();
+app.MapDiagnosticsEndpoints();
 
 app.Run();
 

@@ -6,8 +6,11 @@ obj/
 *.user
 *.suo
 .vs/
-.vscode/
-.claude/
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+.claude/*
+!.claude/settings.json
 
 # Aspire
 .aspire/

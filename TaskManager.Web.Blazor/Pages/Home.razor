@@ -106,8 +106,18 @@
     private async Task LoadTasks()
     {
         loading = true;
-        tasks = await Http.GetFromJsonAsync<List<TaskItem>>("tasks") ?? [];
-        loading = false;
+        try
+        {
+            tasks = await Http.GetFromJsonAsync<List<TaskItem>>("tasks") ?? [];
+        }
+        catch (HttpRequestException)
+        {
+            Snackbar.Add("Could not reach the API — is it running?", Severity.Error);
+        }
+        finally
+        {
+            loading = false;
+        }
     }
 
     private async Task CreateTask()

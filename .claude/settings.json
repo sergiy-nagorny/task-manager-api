@@ -8,7 +8,8 @@
             "type": "command",
             "shell": "powershell",
             "command": "$raw = [Console]::In.ReadToEnd(); $json = $raw | ConvertFrom-Json; if ($json.tool_input.file_path -match '\\.cs$') { dotnet test TaskManager.Api.Tests --verbosity quiet }",
-            "timeout": 30
+            "timeout": 30,
+            "statusMessage": "Running unit tests..."
           }
         ]
       }

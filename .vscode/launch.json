@@ -39,6 +39,14 @@
             }
         },
         {
+            "name": "Debug Blazor (standalone)",
+            "type": "blazorwasm",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/TaskManager.Web.Blazor",
+            "url": "http://localhost:5182",
+            "browser": "chrome"
+        },
+        {
             "name": "Attach to running API",
             "type": "coreclr",
             "request": "attach",

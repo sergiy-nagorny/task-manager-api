@@ -1,0 +1,47 @@
+@inject HttpClient Http
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="editTitle" Label="Title" Variant="Variant.Outlined"
+            Class="mb-4" Required="true" />
+        <MudTextField @bind-Value="editDescription" Label="Description" Variant="Variant.Outlined" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Save"
+            Disabled="string.IsNullOrWhiteSpace(editTitle)">
+            Save
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+    [Parameter] public TaskItem Task { get; set; } = default!;
+
+    private string editTitle = "";
+    private string? editDescription;
+
+    protected override void OnInitialized()
+    {
+        editTitle = Task.Title;
+        editDescription = Task.Description;
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private async Task Save()
+    {
+        var response = await Http.PutAsJsonAsync($"tasks/{Task.Id}", new
+        {
+            title = editTitle,
+            description = editDescription,
+            isComplete = Task.IsComplete
+        });
+        if (response.IsSuccessStatusCode)
+        {
+            var updated = await response.Content.ReadFromJsonAsync<TaskItem>();
+            MudDialog.Close(DialogResult.Ok(updated!));
+        }
+    }
+}

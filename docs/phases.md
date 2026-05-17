@@ -62,7 +62,22 @@ Test the full HTTP stack end-to-end.
 
 ---
 
-## Phase 6 — Code Quality ← current
+## Phase 6 — Blazor WASM Frontend ✅
+
+**Done.**
+
+- Added `TaskManager.Web.Blazor` (Blazor WebAssembly + MudBlazor 9.x)
+- MudBlazor Material Design UI — no JavaScript, one NuGet dependency
+- Full CRUD: create form (Enter key support), task table with status chip, complete/undo/edit/delete per row
+- `EditTaskDialog` component for inline editing via `PUT /tasks/{id}`
+- Snackbar notifications for all mutations
+- API URL configured via `wwwroot/appsettings.json` (Blazor WASM runs in browser, can't use Aspire service discovery)
+- Registered in Aspire — single F5 starts API + Blazor together
+- VS Code launch config: `blazorwasm` debug type for standalone preview without Aspire
+
+---
+
+## Phase 7 — Code Quality ← current
 
 Enforce consistent style and safety across the solution.
 
@@ -72,7 +87,7 @@ Enforce consistent style and safety across the solution.
 
 ---
 
-## Phase 7 — Input Validation
+## Phase 8 — Input Validation
 
 Reject bad input at the API boundary.
 

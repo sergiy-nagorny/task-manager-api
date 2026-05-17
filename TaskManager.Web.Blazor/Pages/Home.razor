@@ -1,0 +1,171 @@
+@page "/"
+@inject HttpClient Http
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<PageTitle>Task Manager</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-6">
+
+    <MudCard Elevation="2" Class="mb-6">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">New Task</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudTextField @bind-Value="newTitle" Label="Title" Variant="Variant.Outlined"
+                Class="mb-3" Required="true" @onkeydown="OnTitleKeyDown" />
+            <MudTextField @bind-Value="newDescription" Label="Description (optional)"
+                Variant="Variant.Outlined" Lines="2" />
+        </MudCardContent>
+        <MudCardActions Class="px-4 pb-4">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+                OnClick="CreateTask" Disabled="string.IsNullOrWhiteSpace(newTitle)">
+                Add Task
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+
+    <MudCard Elevation="2">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">Tasks</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent Class="pa-0">
+            @if (loading)
+            {
+                <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+            }
+            else if (tasks.Count == 0)
+            {
+                <MudText Class="pa-6 mud-text-secondary" Align="Align.Center">
+                    No tasks yet. Add one above.
+                </MudText>
+            }
+            else
+            {
+                <MudTable Items="tasks" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm">
+                    <HeaderContent>
+                        <MudTh Style="width:110px">Status</MudTh>
+                        <MudTh>Task</MudTh>
+                        <MudTh Style="width:120px" Class="text-right">Actions</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>
+                            @if (context.IsComplete)
+                            {
+                                <MudChip T="string" Color="Color.Success" Size="Size.Small" Icon="@Icons.Material.Filled.CheckCircle">Done</MudChip>
+                            }
+                            else
+                            {
+                                <MudChip T="string" Color="Color.Default" Size="Size.Small" Icon="@Icons.Material.Filled.RadioButtonUnchecked">Open</MudChip>
+                            }
+                        </MudTd>
+                        <MudTd>
+                            <MudText Style="@(context.IsComplete ? "text-decoration:line-through;opacity:0.6" : "")">
+                                @context.Title
+                            </MudText>
+                            @if (!string.IsNullOrWhiteSpace(context.Description))
+                            {
+                                <MudText Typo="Typo.body2" Class="mud-text-secondary">@context.Description</MudText>
+                            }
+                        </MudTd>
+                        <MudTd Class="text-right">
+                            <MudTooltip Text="@(context.IsComplete ? "Mark open" : "Mark done")">
+                                <MudIconButton Icon="@(context.IsComplete ? Icons.Material.Filled.Undo : Icons.Material.Filled.CheckCircle)"
+                                    Color="@(context.IsComplete ? Color.Default : Color.Success)"
+                                    Size="Size.Small" OnClick="() => ToggleComplete(context)" />
+                            </MudTooltip>
+                            <MudTooltip Text="Edit">
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary"
+                                    Size="Size.Small" OnClick="() => OpenEditDialog(context)" />
+                            </MudTooltip>
+                            <MudTooltip Text="Delete">
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error"
+                                    Size="Size.Small" OnClick="() => DeleteTask(context)" />
+                            </MudTooltip>
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            }
+        </MudCardContent>
+    </MudCard>
+
+</MudContainer>
+
+@code {
+    private List<TaskItem> tasks = [];
+    private string newTitle = "";
+    private string? newDescription;
+    private bool loading = true;
+
+    protected override async Task OnInitializedAsync() => await LoadTasks();
+
+    private async Task LoadTasks()
+    {
+        loading = true;
+        tasks = await Http.GetFromJsonAsync<List<TaskItem>>("tasks") ?? [];
+        loading = false;
+    }
+
+    private async Task CreateTask()
+    {
+        if (string.IsNullOrWhiteSpace(newTitle)) return;
+        var response = await Http.PostAsJsonAsync("tasks", new { title = newTitle, description = newDescription });
+        if (response.IsSuccessStatusCode)
+        {
+            var created = await response.Content.ReadFromJsonAsync<TaskItem>();
+            tasks.Add(created!);
+            newTitle = "";
+            newDescription = null;
+            Snackbar.Add("Task created", Severity.Success);
+        }
+    }
+
+    private async Task ToggleComplete(TaskItem task)
+    {
+        var response = await Http.PutAsJsonAsync($"tasks/{task.Id}", new
+        {
+            title = task.Title,
+            description = task.Description,
+            isComplete = !task.IsComplete
+        });
+        if (response.IsSuccessStatusCode)
+        {
+            var updated = await response.Content.ReadFromJsonAsync<TaskItem>();
+            var idx = tasks.IndexOf(task);
+            if (idx >= 0) tasks[idx] = updated!;
+        }
+    }
+
+    private async Task OpenEditDialog(TaskItem task)
+    {
+        var parameters = new DialogParameters<EditTaskDialog> { { d => d.Task, task } };
+        var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true, CloseButton = true };
+        var dialog = await DialogService.ShowAsync<EditTaskDialog>("Edit Task", parameters, options);
+        var result = await dialog.Result;
+        if (!result!.Canceled && result.Data is TaskItem updated)
+        {
+            var idx = tasks.IndexOf(task);
+            if (idx >= 0) tasks[idx] = updated;
+            Snackbar.Add("Task updated", Severity.Success);
+        }
+    }
+
+    private async Task DeleteTask(TaskItem task)
+    {
+        var response = await Http.DeleteAsync($"tasks/{task.Id}");
+        if (response.IsSuccessStatusCode)
+        {
+            tasks.Remove(task);
+            Snackbar.Add("Task deleted", Severity.Info);
+        }
+    }
+
+    private async Task OnTitleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await CreateTask();
+    }
+}

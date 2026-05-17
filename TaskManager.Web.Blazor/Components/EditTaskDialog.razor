@@ -1,4 +1,5 @@
 @inject HttpClient Http
+@inject ISnackbar Snackbar
 
 <MudDialog>
     <DialogContent>
@@ -32,16 +33,27 @@
 
     private async Task Save()
     {
-        var response = await Http.PutAsJsonAsync($"tasks/{Task.Id}", new
+        try
         {
-            title = editTitle,
-            description = editDescription,
-            isComplete = Task.IsComplete
-        });
-        if (response.IsSuccessStatusCode)
+            var response = await Http.PutAsJsonAsync($"tasks/{Task.Id}", new
+            {
+                title = editTitle,
+                description = editDescription,
+                isComplete = Task.IsComplete
+            });
+            if (response.IsSuccessStatusCode)
+            {
+                var updated = await response.Content.ReadFromJsonAsync<TaskItem>();
+                MudDialog.Close(DialogResult.Ok(updated!));
+            }
+            else
+            {
+                Snackbar.Add("Failed to save task", Severity.Error);
+            }
+        }
+        catch (HttpRequestException)
         {
-            var updated = await response.Content.ReadFromJsonAsync<TaskItem>();
-            MudDialog.Close(DialogResult.Ok(updated!));
+            Snackbar.Add("Could not reach the API", Severity.Error);
         }
     }
 }

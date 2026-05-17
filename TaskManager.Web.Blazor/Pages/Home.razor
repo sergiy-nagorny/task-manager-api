@@ -123,38 +123,52 @@
     private async Task CreateTask()
     {
         if (string.IsNullOrWhiteSpace(newTitle)) return;
-        var response = await Http.PostAsJsonAsync("tasks", new { title = newTitle, description = newDescription });
-        if (response.IsSuccessStatusCode)
+        try
         {
-            var created = await response.Content.ReadFromJsonAsync<TaskItem>();
-            tasks.Add(created!);
-            newTitle = "";
-            newDescription = null;
-            Snackbar.Add("Task created", Severity.Success);
+            var response = await Http.PostAsJsonAsync("tasks", new { title = newTitle, description = newDescription });
+            if (response.IsSuccessStatusCode)
+            {
+                var created = await response.Content.ReadFromJsonAsync<TaskItem>();
+                tasks.Add(created!);
+                newTitle = "";
+                newDescription = null;
+                Snackbar.Add("Task created", Severity.Success);
+            }
+            else
+            {
+                Snackbar.Add("Failed to create task", Severity.Error);
+            }
         }
-        else
+        catch (HttpRequestException)
         {
-            Snackbar.Add("Failed to create task", Severity.Error);
+            Snackbar.Add("Could not reach the API", Severity.Error);
         }
     }
 
     private async Task ToggleComplete(TaskItem task)
     {
-        var response = await Http.PutAsJsonAsync($"tasks/{task.Id}", new
+        try
         {
-            title = task.Title,
-            description = task.Description,
-            isComplete = !task.IsComplete
-        });
-        if (response.IsSuccessStatusCode)
-        {
-            var updated = await response.Content.ReadFromJsonAsync<TaskItem>();
-            var idx = tasks.IndexOf(task);
-            if (idx >= 0) tasks[idx] = updated!;
+            var response = await Http.PutAsJsonAsync($"tasks/{task.Id}", new
+            {
+                title = task.Title,
+                description = task.Description,
+                isComplete = !task.IsComplete
+            });
+            if (response.IsSuccessStatusCode)
+            {
+                var updated = await response.Content.ReadFromJsonAsync<TaskItem>();
+                var idx = tasks.IndexOf(task);
+                if (idx >= 0) tasks[idx] = updated!;
+            }
+            else
+            {
+                Snackbar.Add("Failed to update task", Severity.Error);
+            }
         }
-        else
+        catch (HttpRequestException)
         {
-            Snackbar.Add("Failed to update task", Severity.Error);
+            Snackbar.Add("Could not reach the API", Severity.Error);
         }
     }
 
@@ -174,15 +188,22 @@
 
     private async Task DeleteTask(TaskItem task)
     {
-        var response = await Http.DeleteAsync($"tasks/{task.Id}");
-        if (response.IsSuccessStatusCode)
+        try
         {
-            tasks.Remove(task);
-            Snackbar.Add("Task deleted", Severity.Info);
+            var response = await Http.DeleteAsync($"tasks/{task.Id}");
+            if (response.IsSuccessStatusCode)
+            {
+                tasks.Remove(task);
+                Snackbar.Add("Task deleted", Severity.Info);
+            }
+            else
+            {
+                Snackbar.Add("Failed to delete task", Severity.Error);
+            }
         }
-        else
+        catch (HttpRequestException)
         {
-            Snackbar.Add("Failed to delete task", Severity.Error);
+            Snackbar.Add("Could not reach the API", Severity.Error);
         }
     }
 

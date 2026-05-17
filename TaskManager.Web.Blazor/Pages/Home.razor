@@ -122,6 +122,10 @@
             newDescription = null;
             Snackbar.Add("Task created", Severity.Success);
         }
+        else
+        {
+            Snackbar.Add("Failed to create task", Severity.Error);
+        }
     }
 
     private async Task ToggleComplete(TaskItem task)
@@ -137,6 +141,10 @@
             var updated = await response.Content.ReadFromJsonAsync<TaskItem>();
             var idx = tasks.IndexOf(task);
             if (idx >= 0) tasks[idx] = updated!;
+        }
+        else
+        {
+            Snackbar.Add("Failed to update task", Severity.Error);
         }
     }
 
@@ -161,6 +169,10 @@
         {
             tasks.Remove(task);
             Snackbar.Add("Task deleted", Severity.Info);
+        }
+        else
+        {
+            Snackbar.Add("Failed to delete task", Severity.Error);
         }
     }
 

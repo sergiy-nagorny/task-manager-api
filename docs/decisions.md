@@ -34,9 +34,9 @@ All error responses return structured JSON instead of plain strings. Enabled via
 
 ---
 
-## SQLite for Phase 8 (over SQL Server / Postgres)
+## SQLite for Phase 12 (over SQL Server / Postgres)
 
-Keeps the local dev experience simple — no Docker, no server process. Easy to swap for Azure SQL in Phase 12 by changing the EF Core connection string and provider.
+Keeps the local dev experience simple — no Docker, no server process. Easy to swap for Azure SQL in Phase 16 (cloud deploy) by changing the EF Core connection string and provider.
 
 ---
 

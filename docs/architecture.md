@@ -8,10 +8,15 @@ A Task Manager REST API built with .NET 10, using Minimal APIs and .NET Aspire f
 
 ```
 TaskManager.sln
-├── TaskManager.AppHost          — Aspire orchestrator (entry point for running locally)
-├── TaskManager.Api              — The REST API
-├── TaskManager.Api.Tests        — Unit tests (xUnit)
-└── TaskManager.ServiceDefaults  — Shared Aspire config (telemetry, health checks)
+├── TaskManager.AppHost              — Aspire orchestrator (entry point for running locally)
+├── TaskManager.Api                  — The REST API
+├── TaskManager.Api.Tests            — API unit + integration tests (xUnit)
+├── TaskManager.Domain               — Core entities (TaskItem)
+├── TaskManager.Application          — Interfaces (ITaskRepository) and DTOs
+├── TaskManager.Infrastructure       — InMemoryTaskRepository (replaced by EF Core in Phase 12)
+├── TaskManager.Web.Blazor           — Blazor WASM frontend (MudBlazor, registered in Aspire)
+├── TaskManager.Web.Blazor.Tests     — Blazor component tests (bUnit)
+└── TaskManager.ServiceDefaults      — Shared Aspire config (telemetry, health checks)
 ```
 
 ## Stack
@@ -23,9 +28,9 @@ TaskManager.sln
 | API docs | Built-in OpenAPI + Scalar UI |
 | Error responses | Problem Details (RFC 7807) |
 | Data store (Phase 1) | In-memory Dictionary |
-| Data store (Phase 8) | EF Core + SQLite |
-| Auth (Phase 11) | Entra ID |
-| Hosting (Phase 12) | Azure Container Apps |
+| Data store (Phase 12) | EF Core + SQLite |
+| Auth (Phase 15) | Entra ID |
+| Hosting (Phase 16) | Azure Container Apps |
 
 ## API Endpoints
 

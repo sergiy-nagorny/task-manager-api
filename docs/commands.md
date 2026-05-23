@@ -5,10 +5,15 @@
 winget install Microsoft.DotNet.SDK.10 --accept-source-agreements --accept-package-agreements --silent
 winget install GitHub.cli --accept-source-agreements --accept-package-agreements
 dotnet dev-certs https --trust
+dotnet tool install -g Aspire.Cli          # Aspire CLI (global dotnet tool, Aspire 13.3+)
 ```
 
 ## Scaffold the Solution
 ```
+# Aspire 13.3+ (new CLI)
+aspire new                                  # create new app from starter template
+
+# Legacy (pre-13.3, kept for reference)
 dotnet new install Aspire.ProjectTemplates
 dotnet new aspire -n TaskManager -o .
 dotnet new webapi -n TaskManager.Api -o TaskManager.Api --use-minimal-apis
@@ -25,7 +30,19 @@ dotnet add TaskManager.Api package Scalar.AspNetCore
 ## Build & Run
 ```
 dotnet build TaskManager.sln
-dotnet run --project TaskManager.AppHost   # runs Aspire dashboard + API (no Docker needed for plain .NET resources)
+aspire run                                 # runs Aspire dashboard + API (preferred with Aspire 13.3+)
+dotnet run --project TaskManager.AppHost   # equivalent — still works
+```
+
+## Aspire CLI (13.3+)
+```
+aspire update                              # update Aspire SDK + integration packages to latest
+aspire update --self                       # update the Aspire CLI tool itself
+aspire doctor                              # diagnose environment issues
+aspire logs [<resource>]                   # tail logs from a running resource
+aspire ps                                  # list running AppHosts
+aspire add <integration>                   # add a hosting integration (e.g. redis, postgres)
+aspire docs                                # browse Aspire docs from the terminal
 ```
 
 ## Git & GitHub

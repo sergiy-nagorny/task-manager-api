@@ -6,7 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 # Run the full solution via Aspire (dashboard + API)
-dotnet run --project TaskManager.AppHost
+aspire run                                # preferred (Aspire CLI 13.3+)
+dotnet run --project TaskManager.AppHost  # equivalent fallback
 
 # Run the API directly (no Aspire dashboard)
 dotnet run --project TaskManager.Api

@@ -4,32 +4,115 @@ Standalone projects and learning exercises outside the main Task Manager API roa
 
 ---
 
-## Task Manager Frontend — Web + Mobile (React ecosystem)
+## Task Manager Frontend — Cross-platform paths (sorted by ROI)
 
-Rebuild the Blazor WASM frontend using the most widely-used UI ecosystem, **starting with web (React + Vite) and extending to mobile (React Native)**. Same API, same features, modern stack with the highest learning ROI on the job market.
+For a .NET team building enterprise software, the highest ROI path is **extending what already exists** — not learning a new ecosystem from scratch. The biggest enterprise cost is people; the cheapest line of code is the one your team can already write.
 
-### Strategy: two frameworks, one ecosystem
+### ROI summary
 
-No single framework is simultaneously *most common*, *best-looking*, and *truly cross-device*. The pragmatic choice is to use React for the web (Phase A) and React Native for mobile (Phase B) — same language (TypeScript), same component model, same mental model. Shared knowledge transfers; the only thing that changes between targets is the rendering layer.
+| Order | Path | ROI for this team | When to do it |
+|---|---|---|---|
+| **1 (recommended)** | **MAUI Blazor Hybrid** | **Highest** — reuses existing Razor + MudBlazor components, single codebase, single language, Microsoft long-term support | When the team needs to ship mobile/desktop versions of the existing app |
+| 2 (learning) | React + Vite (web) | Educational — learn the dominant frontend ecosystem and broaden hireability | When the team wants cross-stack fluency or is exploring non-.NET hires |
+| 3 (learning) | React Native + Expo (mobile) | Educational — learn the dominant cross-platform mobile pattern | After Phase A, for completeness in the React ecosystem |
+| 4 (learning) | Vanilla HTML5 + Web Components | Educational — strip the framework away to understand what it does | When the team wants to demystify framework abstractions |
 
-### Why this split over "one framework for everything"
-
-| Alternative | What it offers | Why we didn't pick it |
-|---|---|---|
-| **Flutter** | True write-once: single Dart codebase → Android, iOS, web, desktop. Pixel-perfect identical UI on every platform. | Different language (Dart) with no carry-over to .NET work. Web target renders to canvas — poor accessibility and SEO. Smaller job market than React. |
-| **.NET MAUI Blazor Hybrid** | Reuses existing Razor components on Android, iOS, Windows, Mac, web. Highest reuse of existing skill. | Defeats the purpose of this exercise — the goal is to *learn a new ecosystem*, not stay in .NET. Smaller community than React Native. |
-| **React Native + React Native Web** | Single React codebase for iOS, Android, *and* web. Used by Meta, Microsoft Outlook, Shopify. | Web target is a second-class citizen — feels less native on web than a real web app. Heavier toolchain. The "RNW" library has fewer maintainers than React or React Native individually. |
-| **PWA on top of Blazor WASM** | Smallest delta — add a manifest + service worker, installs on Pixel 9 from Chrome. | Still a web app underneath; limited access to native APIs. Doesn't teach anything new. iOS support has gaps. |
-| **Capacitor / Ionic** | Wraps a web app in a native container for the app stores. | Hybrid feel — not truly native. Performance is web-tier, not native-tier. |
-| **Vue 3 + NativeScript** | Vue ecosystem equivalent of React + React Native. | Vue has a smaller ecosystem than React; NativeScript has a much smaller community than React Native. |
-
-**The trade-off being accepted:** writing the UI twice (once in React, once in React Native). The web and mobile codebases share TypeScript types and API client logic but not UI components. In exchange you get a *real* web app and a *real* native mobile app — neither compromised.
+The phases below are documented in this priority order.
 
 ---
 
-### Phase A — Web (React + Vite)
+## Recommended — MAUI Blazor Hybrid
 
-The dominant web front-end stack. Material Design UI via MUI.
+Highest-ROI path. Extends the existing Blazor WASM app to native Android, iOS, Windows, and macOS apps **without rewriting the UI**.
+
+### Why this wins on ROI
+
+- **Reuses the entire `TaskManager.Web.Blazor` project** — all `.razor` components, MudBlazor styles, services
+- **Single codebase, single language** (C#) — no JavaScript context switch
+- **Microsoft long-term support** — not subject to JS framework churn (React Native major version upgrades are notoriously painful)
+- **Same EF Core, same DI, same hosting model** — your existing knowledge transfers 1:1
+- **MudBlazor already chosen** — the Material Design investment from Phase 6 pays off on mobile too
+- **No dual-team risk** — same team ships web and mobile
+
+### What you give up vs React Native
+- **Mobile rendering is via BlazorWebView (a native WebView)** — ~95% native feel, but scroll inertia, keyboard handling, and platform gestures are slightly less polished than React Native or Swift/Kotlin
+- **Animations are CSS-based**, not platform-native animation APIs
+- **Cold-start is slightly slower** than a fully native app
+- For CRUD apps (like this one): differences are imperceptible. For high-touch consumer apps with custom animations: native or Flutter would be better
+
+### Stack
+- **.NET MAUI** — cross-platform host shell (Android, iOS, Windows, macOS)
+- **MAUI `BlazorWebView`** — hosts existing Razor components inside the native shell
+- **MudBlazor** — reused unchanged from the existing Blazor WASM project
+- **Existing Task Manager API** — called over HTTPS from the hybrid app
+
+### Setup
+```bash
+# Install MAUI workload (one-time)
+dotnet workload install maui
+
+# Create the hybrid project
+dotnet new maui-blazor -n TaskManager.MauiBlazor
+cd TaskManager.MauiBlazor
+
+# Reference the existing Blazor component library so all .razor files are shared
+dotnet add reference ../TaskManager.Web.Blazor/TaskManager.Web.Blazor.csproj
+```
+
+Then wire up DI in `MauiProgram.cs` to register the same services the web app uses (HTTP client, etc.).
+
+### What carries over from the current Blazor WASM app
+- All `.razor` components — `Home.razor`, `EditTaskDialog.razor`, layout components
+- All MudBlazor providers and theming
+- Services, DI registration, models, DTOs
+- bUnit tests (still work — they test components, not hosts)
+
+What you write new:
+- The MAUI shell (`App.xaml`, `MainPage.xaml` with a `<BlazorWebView>`)
+- Touch-friendly tweaks (button sizing, safe-area insets on iOS)
+- Platform-specific extras as needed: push notifications, offline cache, biometric auth, deep links
+
+### Common gotchas (same family as React Native)
+1. **`localhost` doesn't reach the dev machine from a phone.** Same fix as Phase B — use the dev machine's LAN IP and bind the API to `0.0.0.0`
+2. **The .NET HTTPS dev cert is not trusted on Android/iOS.** Same fix — use HTTP in dev (port 5000)
+3. **Touch targets** — MudBlazor sizing is desktop-first; check tap target sizes on mobile
+
+### Progression
+1. Install the MAUI workload, scaffold `TaskManager.MauiBlazor`
+2. Reference the existing `TaskManager.Web.Blazor` project so all Razor components are shared
+3. Configure `HttpClient` in `MauiProgram.cs` pointing at the API (LAN IP for dev)
+4. Run on Android (emulator or device via USB debugging) — verify CRUD works end-to-end
+5. Run on Windows (instant — same machine)
+6. Test touch targets, scrolling, keyboard behaviour; tweak MudBlazor sizing if needed
+7. (Optional, needs a Mac or MacInCloud) Build for iOS
+8. (Optional) Add platform features — push notifications via Plugin.LocalNotification, offline storage via `SecureStorage`
+
+---
+
+## Learning phases (later) — for ecosystem breadth, not enterprise ROI
+
+The three phases below are valuable as **learning exercises** that build cross-stack fluency, but they are **not** the right enterprise choice for a .NET team. Documented here because:
+- They teach the dominant frontend ecosystems (React is #1 by job market)
+- Cross-stack fluency makes you a better .NET developer (you see what other ecosystems get right)
+- They serve as escape hatches if the team's stack ever shifts away from .NET
+
+If shipping enterprise software, do the MAUI Blazor path above instead.
+
+### Frameworks considered as enterprise recommendations (and why we picked MAUI Blazor)
+
+| Alternative | What it offers | Why MAUI Blazor wins for this team |
+|---|---|---|
+| **React + React Native** | Largest ecosystem, easiest non-.NET hiring | Forces team to learn a new language (TypeScript) and two new frameworks (React, RN); two codebases double the maintenance |
+| **Flutter** | True write-once: Dart → Android, iOS, web, desktop | Different language with zero .NET carry-over; web target renders to canvas (poor accessibility); harder hiring in most .NET markets |
+| **PWA on top of Blazor WASM** | Smallest delta — add manifest + service worker | Works, but limited access to native APIs; iOS PWA support has gaps; doesn't give true app-store distribution |
+| **Capacitor / Ionic** | Wraps a web app in a native container | Hybrid feel; performance is web-tier; MAUI Blazor wraps in a more capable native shell |
+| **Vue 3 + NativeScript** | Vue ecosystem equivalent of React + React Native | Smaller community than React; NativeScript has very small community vs RN |
+
+---
+
+### Phase A (learning) — Web (React + Vite)
+
+The dominant web front-end stack. Material Design UI via MUI. Learning exercise — for enterprise web work in a .NET team, the MAUI Blazor path above is higher ROI.
 
 #### Stack
 - **React 18+** — UI library (the de facto web standard)
@@ -83,9 +166,11 @@ Access it in code via `import.meta.env.VITE_API_URL`. Vite only exposes variable
 
 ---
 
-### Phase B — Mobile (React Native, target: Android first)
+### Phase B (learning) — Mobile (React Native, target: Android first)
 
 Native Android and iOS app built with React Native. Primary test device: Android (e.g. Pixel 9). iOS comes free *in code* but **building/running iOS apps requires a Mac** — on Windows you can either use Expo EAS Build (cloud-based iOS builds, requires an Apple Developer account) or defer iOS until you have a Mac available.
+
+Learning exercise — for enterprise mobile work in a .NET team, the MAUI Blazor path above is higher ROI.
 
 #### Stack
 - **React Native** — same component model as React, but renders to native iOS/Android views instead of HTML
@@ -178,7 +263,7 @@ The existing dev CORS policy in `Program.cs` already uses `AllowAnyOrigin()`, so
 
 ---
 
-### Phase C — Vanilla Web (HTML5 + Web Components) — learning exercise
+### Phase C (learning) — Vanilla Web (HTML5 + Web Components)
 
 Build the same task manager a *third* time, this time using **no framework at all** — only what ships in the browser. The goal isn't a production app; it's to understand what React and Blazor are actually doing for you by removing them.
 

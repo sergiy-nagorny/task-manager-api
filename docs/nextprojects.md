@@ -18,12 +18,12 @@ Rebuild the existing Blazor WASM task manager frontend using React + Vite — sa
 | **UI parity** | MUI (Material UI) is the React equivalent of MudBlazor — same Material Design system, nearly identical component API |
 
 **Alternatives considered and why skipped:**
-- *Vue 3 + Vite* — marginally easier syntax but much smaller ecosystem; fewer resources for learners
+- *Vue 3 + Vite* — marginally easier syntax but smaller ecosystem than React; fewer tutorials and job postings
 - *React + Next.js* — adds SSR and file-based routing complexity not needed for a simple SPA
 - *React Native* — mobile only (iOS/Android); no HTML/CSS; completely different paradigm from the current web app
 
 ### Stack
-- **React 18** — UI library
+- **React 18+** — UI library
 - **Vite** — dev server and bundler (replaces Webpack; instant HMR)
 - **TypeScript** — type safety (mirrors `<Nullable>enable</Nullable>` discipline in the .NET project)
 - **MUI (Material UI)** — component library equivalent of MudBlazor
@@ -33,10 +33,16 @@ Rebuild the existing Blazor WASM task manager frontend using React + Vite — sa
 ```bash
 npm create vite@latest taskmanager-react -- --template react-ts
 cd taskmanager-react
-npm install
+# @emotion/* are required peer dependencies of MUI, not optional extras
 npm install @mui/material @emotion/react @emotion/styled @mui/icons-material
 npm run dev
 ```
+
+Configure the API URL in `.env.local` (equivalent to Blazor's `wwwroot/appsettings.json`):
+```
+VITE_API_URL=https://localhost:7001
+```
+Access it in code via `import.meta.env.VITE_API_URL`. Vite only exposes variables prefixed `VITE_` to the browser bundle.
 
 ### Features to implement (matching Blazor app)
 - [ ] Load and display task list from `GET /tasks`
@@ -55,7 +61,7 @@ npm run dev
 | `@bind` / two-way binding | `useState` + `onChange` |
 | `OnInitializedAsync` | `useEffect(() => {}, [])` |
 | `IDialogService.ShowAsync` | Conditional render or MUI `<Dialog>` |
-| Snackbar | MUI `useSnackbar` / `<Snackbar>` |
+| Snackbar | `useState` + MUI `<Snackbar>` |
 
 ### Progression
 1. Scaffold with Vite, get dev server running
@@ -64,7 +70,7 @@ npm run dev
 4. Add complete/delete actions per row
 5. Add `EditTaskDialog` component
 6. Wire up snackbar notifications
-7. Point `VITE_API_URL` at the running .NET API and test end-to-end
+7. Set `VITE_API_URL` in `.env.local` and test end-to-end against the running .NET API
 
 ---
 

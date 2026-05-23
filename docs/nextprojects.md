@@ -178,6 +178,81 @@ The existing dev CORS policy in `Program.cs` already uses `AllowAnyOrigin()`, so
 
 ---
 
+### Phase C — Vanilla Web (HTML5 + Web Components) — learning exercise
+
+Build the same task manager a *third* time, this time using **no framework at all** — only what ships in the browser. The goal isn't a production app; it's to understand what React and Blazor are actually doing for you by removing them.
+
+#### Why this is worth doing after A and B
+Phases A (React) and B (React Native) teach you frameworks. Phase C teaches you the **platform underneath** the frameworks. You'll implement — by hand — the things `useState`, `useEffect`, and Blazor's `StateHasChanged()` do automatically. After this exercise, you'll never have to wonder *why* a framework exists.
+
+#### Stack
+- **HTML5** — `<template>` element, Custom Elements, Shadow DOM
+- **Vanilla JavaScript** (ES2022+) — native ES modules, no transpilation, no build step required
+- **Material Web Components** (`@material/web` by Google) — Material Design 3 as plain custom elements like `<md-filled-button>`, `<md-outlined-text-field>`, `<md-dialog>`. Smaller scope than MUI (~25 components vs MUI's 70+) but enough for a CRUD app
+- **fetch** — same as Phase A and B
+
+#### Setup (minimal — no `npm` required for the core)
+```bash
+mkdir taskmanager-vanilla
+cd taskmanager-vanilla
+# Optional: only needed if you want @material/web from npm
+npm init -y
+npm install @material/web
+# Or skip npm entirely and load Material Web from a CDN via <script type="module">
+
+# Serve the static files (any static server works)
+npx serve .
+```
+
+A single `index.html` with `<script type="module" src="./app.js">` is enough to start. No bundler, no transpiler, no `node_modules` for the app itself if you use CDN imports.
+
+#### The trade-off (this *is* the learning)
+| What you give up vs React | What you gain |
+|---|---|
+| Built-in reactive state (`useState`) | You implement a 20-line reactive store and finally understand it |
+| JSX templating | DOM API fluency — `document.createElement`, `<template>` cloning, `element.replaceChildren()` |
+| Hot Module Replacement | Browser refresh — slower but no toolchain to maintain |
+| Pre-built component library at MUI scale | A real, but smaller, Material library: `@material/web` |
+| Routing via `react-router-dom` | The History API in ~30 lines |
+
+#### Features to implement (same CRUD app, framework-free)
+- [ ] Define `<task-list>` as a Custom Element that fetches and renders tasks
+- [ ] Define `<task-row>` as a Custom Element with complete/edit/delete actions
+- [ ] Define `<task-create-form>` with Enter-key submit
+- [ ] Define `<edit-task-dialog>` using `<dialog>` (native HTML5 modal — no library needed)
+- [ ] Roll a tiny reactive store (Pub/Sub or `EventTarget`) to keep components in sync
+- [ ] Show snackbar messages with a small custom `<task-snackbar>` element (Material Web doesn't ship a snackbar — build your own with CSS transitions, or pull a third-party one)
+
+#### Key concepts to learn
+| Framework concept (React/Blazor) | Vanilla equivalent |
+|---|---|
+| Component | `class MyEl extends HTMLElement { connectedCallback() { ... } }` |
+| `useState` / Blazor `[Parameter]` | Custom getters/setters on the element + `this.render()` |
+| `useEffect(fn, [])` / `OnInitializedAsync` | `connectedCallback()` lifecycle |
+| Cleanup (`useEffect` return) | `disconnectedCallback()` lifecycle |
+| Two-way binding | Explicit `addEventListener('input', ...)` + state update |
+| JSX | `<template>` + `cloneNode(true)` or tagged template literals |
+| CSS-in-JS / scoped styles | Shadow DOM scopes CSS for free |
+| Dialog | Native `<dialog>` element (no library needed) or `<md-dialog>` |
+| Snackbar | Roll your own — Material Web doesn't include one |
+
+#### Progression
+1. Static `index.html` that fetches `/tasks` with `fetch` and dumps JSON into a `<pre>` — confirm the API talks to the page
+2. Build `<task-row>` as a Custom Element, render one hardcoded task
+3. Build `<task-list>` that fetches and renders many `<task-row>` instances
+4. Add the create form — `<task-create-form>` dispatching a `CustomEvent` upward
+5. Add complete/delete buttons that `PUT`/`DELETE` and refresh the list
+6. Add `<edit-task-dialog>` using the native `<dialog>` element
+7. Add a tiny reactive store so siblings update without prop drilling
+
+#### Optional: graduate to Lit
+If pure vanilla starts feeling verbose mid-project, **[Lit](https://lit.dev)** (5 KB, by Google) sits on top of Web Components and adds reactive properties + template literals — same platform underneath, less boilerplate. Used in Chrome's settings UI and YouTube TV. Strict subset of "still basically the platform."
+
+#### Optional alternative paradigm: HTMX
+**[HTMX](https://htmx.org)** flips the model entirely: the server returns HTML fragments and the browser swaps them in via `hx-get` / `hx-post` attributes. Powerful and minimal, but requires the .NET API to return HTML instead of JSON — a much larger architectural change. Flagged here for awareness, not as the main Phase C path.
+
+---
+
 ## Build a Simple GPT from Scratch (nanoGPT)
 
 Implement a minimal GPT transformer in Python following Andrej Karpathy's nanoGPT (github.com/karpathy/nanoGPT).

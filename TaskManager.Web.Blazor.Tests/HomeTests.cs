@@ -87,8 +87,11 @@ public class HomeTests : BlazorTestContext
         var task = MakeTask("Buy milk", done: false);
         var doneTask = new TaskItem
         {
-            Id = task.Id, Title = task.Title, Description = task.Description,
-            IsComplete = true, CreatedAt = task.CreatedAt
+            Id = task.Id,
+            Title = task.Title,
+            Description = task.Description,
+            IsComplete = true,
+            CreatedAt = task.CreatedAt
         };
         MockHttp.When(HttpMethod.Get, "http://localhost/tasks")
             .Respond("application/json", Json(new[] { task }));

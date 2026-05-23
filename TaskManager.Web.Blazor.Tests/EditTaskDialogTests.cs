@@ -54,8 +54,11 @@ public class EditTaskDialogTests : BlazorTestContext
         var task = MakeTask("Buy milk");
         var updated = new TaskItem
         {
-            Id = task.Id, Title = "Buy oat milk", Description = task.Description,
-            IsComplete = task.IsComplete, CreatedAt = task.CreatedAt
+            Id = task.Id,
+            Title = "Buy oat milk",
+            Description = task.Description,
+            IsComplete = task.IsComplete,
+            CreatedAt = task.CreatedAt
         };
         MockHttp.When(HttpMethod.Put, $"http://localhost/tasks/{task.Id}")
             .Respond("application/json", Json(updated));

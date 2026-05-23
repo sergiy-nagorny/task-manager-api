@@ -91,17 +91,17 @@ Test the full HTTP stack end-to-end.
 
 ---
 
-## Phase 8 — Code Quality ← current
+## Phase 8 — Code Quality ✅
 
-Enforce consistent style and safety across the solution.
+**Done.**
 
-- Add `.editorconfig` with formatting rules (indentation, line endings, etc.)
-- Verify nullable reference types are enforced (`<Nullable>enable</Nullable>`)
-- Fix any resulting warnings
+- Added `.editorconfig`: CRLF, UTF-8, 4-space C# indent, file-scoped namespaces, var style, nullable diagnostics promoted to errors
+- Verified `<Nullable>enable</Nullable>` across all 9 projects
+- Ran `dotnet format` to normalise line endings and fix whitespace; all 52 tests pass
 
 ---
 
-## Phase 9 — Input Validation
+## Phase 9 — Input Validation ← current
 
 Reject bad input at the API boundary.
 

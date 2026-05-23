@@ -1,6 +1,3 @@
-using TaskManager.Application;
-using TaskManager.Infrastructure;
-
 namespace TaskManager.Api.Tests;
 
 public class TaskRepositoryTests

@@ -1,8 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-using TaskManager.Application;
-using TaskManager.Domain;
-using TaskManager.Infrastructure;
-
 namespace TaskManager.Api.Tests;
 
 public class TaskEndpointsTests

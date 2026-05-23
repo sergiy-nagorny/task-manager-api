@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
-using TaskManager.Domain;
 
 namespace TaskManager.Api.Tests;
 

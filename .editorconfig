@@ -15,6 +15,9 @@ indent_size = 4
 # Namespace style — file-scoped (already used throughout)
 csharp_style_namespace_declarations = file_scoped:warning
 
+# Usings — System.* first, then alphabetical
+dotnet_sort_system_directives_first = true
+
 # var — use when type is obvious from the right-hand side, otherwise spell it out
 csharp_style_var_for_built_in_types = false:suggestion
 csharp_style_var_when_type_is_apparent = true:suggestion
@@ -26,7 +29,7 @@ csharp_style_expression_bodied_properties = true:suggestion
 csharp_style_expression_bodied_accessors = true:suggestion
 
 # Braces — require for all blocks to avoid dangling-else bugs
-csharp_prefer_braces = when_multiline:suggestion
+csharp_prefer_braces = when_multiline:warning
 
 # Nullable — promote warnings to errors so Nullable>enable has teeth
 dotnet_diagnostic.CS8600.severity = error   # null assigned to non-nullable
@@ -39,6 +42,10 @@ dotnet_diagnostic.CS8625.severity = error   # null literal → non-nullable ref 
 
 # ── MSBuild project files ─────────────────────────────────────────────────────
 [*.{csproj,props,targets}]
+indent_size = 2
+
+# ── JSON ──────────────────────────────────────────────────────────────────────
+[*.json]
 indent_size = 2
 
 # ── Markdown ──────────────────────────────────────────────────────────────────

@@ -4,6 +4,70 @@ Standalone projects and learning exercises outside the main Task Manager API roa
 
 ---
 
+## Task Manager UI — React + Vite (alternative to Blazor WASM)
+
+Rebuild the existing Blazor WASM task manager frontend using React + Vite — same API, same features, different stack. Goal is to compare the two approaches and learn the most widely-used web front-end ecosystem.
+
+### Why React + Vite
+
+| Criterion | Why React + Vite wins |
+|---|---|
+| **Most common** | React is the #1 front-end library by usage, job postings, and ecosystem size — the highest learning ROI |
+| **Cross-device** | Runs in any browser on any device; no native toolchain needed |
+| **Beginner-friendly** | Vite provides zero-config scaffolding; JSX component model maps directly to how Blazor components work |
+| **UI parity** | MUI (Material UI) is the React equivalent of MudBlazor — same Material Design system, nearly identical component API |
+
+**Alternatives considered and why skipped:**
+- *Vue 3 + Vite* — marginally easier syntax but much smaller ecosystem; fewer resources for learners
+- *React + Next.js* — adds SSR and file-based routing complexity not needed for a simple SPA
+- *React Native* — mobile only (iOS/Android); no HTML/CSS; completely different paradigm from the current web app
+
+### Stack
+- **React 18** — UI library
+- **Vite** — dev server and bundler (replaces Webpack; instant HMR)
+- **TypeScript** — type safety (mirrors `<Nullable>enable</Nullable>` discipline in the .NET project)
+- **MUI (Material UI)** — component library equivalent of MudBlazor
+- **Axios or fetch** — HTTP client to call the existing Task Manager API
+
+### Setup
+```bash
+npm create vite@latest taskmanager-react -- --template react-ts
+cd taskmanager-react
+npm install
+npm install @mui/material @emotion/react @emotion/styled @mui/icons-material
+npm run dev
+```
+
+### Features to implement (matching Blazor app)
+- [ ] Load and display task list from `GET /tasks`
+- [ ] Create task (form + Enter key support)
+- [ ] Toggle complete/undo via `PUT /tasks/{id}`
+- [ ] Delete task via `DELETE /tasks/{id}`
+- [ ] Edit task dialog via `PUT /tasks/{id}`
+- [ ] Snackbar notifications for mutations
+- [ ] Empty state message
+
+### Key concepts to learn
+| Concept | React equivalent of Blazor |
+|---|---|
+| Component | Function component returning JSX |
+| `@code` block | Component body (hooks, handlers) |
+| `@bind` / two-way binding | `useState` + `onChange` |
+| `OnInitializedAsync` | `useEffect(() => {}, [])` |
+| `IDialogService.ShowAsync` | Conditional render or MUI `<Dialog>` |
+| Snackbar | MUI `useSnackbar` / `<Snackbar>` |
+
+### Progression
+1. Scaffold with Vite, get dev server running
+2. Create `TaskList` component — fetch and display tasks
+3. Add `CreateTask` form with controlled input and Enter key
+4. Add complete/delete actions per row
+5. Add `EditTaskDialog` component
+6. Wire up snackbar notifications
+7. Point `VITE_API_URL` at the running .NET API and test end-to-end
+
+---
+
 ## Build a Simple GPT from Scratch (nanoGPT)
 
 Implement a minimal GPT transformer in Python following Andrej Karpathy's nanoGPT (github.com/karpathy/nanoGPT).
